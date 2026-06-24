@@ -14,6 +14,9 @@ on:
 permissions:
   contents: write # Essential to authorize uploading binary assets to GitHub Releases
 
+env:
+  PYTHONIOENCODING: utf-8 # Prevents UnicodeEncodeError crashes on Windows runners
+
 jobs:
   build:
     name: Build on ${{ matrix.os }}
@@ -34,10 +37,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4 # Upgraded from v3 to resolve deprecation
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v5 # Upgraded from v4 to resolve deprecation
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11' # Stable target Python environment for all platforms
 
@@ -62,13 +65,13 @@ jobs:
         fi
 
     - name: Upload workflow artifacts
-      uses: actions/upload-artifact@v4 # Upgraded from v3 to resolve deprecation
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.artifact_name }}
         path: dist/${{ matrix.release_name }}
 
     - name: Create or Update GitHub Release
-      uses: softprops/action-gh-release@v2 # Upgraded from v1 to resolve deprecation
+      uses: softprops/action-gh-release@v2
       # Run if triggered by pushing a tag OR manually via workflow_dispatch
       if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
       with:
