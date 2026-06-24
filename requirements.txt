@@ -7,3 +7,4 @@ reportlab>=3.6.12
 pytesseract>=0.3.10
 pdf2docx>=0.5.6
 pyinstaller>=5.8.0
+cryptography>=3.1.0
