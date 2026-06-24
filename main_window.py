@@ -26,7 +26,7 @@ def get_resource_path(relative_path):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Docs Tool - PDF Suite")
+        self.setWindowTitle("Easy PDF Tool")
         self.resize(1100, 750)
         self.setWindowIcon(QIcon(get_resource_path("icon.png")))
         self.setup_ui()
@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         sidebar_layout.setSpacing(10)
 
         # Logo/Title Section
-        logo_label = QLabel("Docs Tool 📑")
+        logo_label = QLabel("Easy PDF Tool 📑")
         logo_label.setObjectName("logo-label")
         logo_label.setAlignment(Qt.AlignCenter)
         sidebar_layout.addWidget(logo_label)

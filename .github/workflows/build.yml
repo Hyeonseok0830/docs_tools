@@ -26,14 +26,14 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            artifact_name: DocsTool-Linux
-            release_name: DocsTool-Linux
+            artifact_name: EasyPDFTool-Linux
+            release_name: EasyPDFTool-Linux
           - os: windows-latest
-            artifact_name: DocsTool-Windows
-            release_name: DocsTool-Windows.exe
+            artifact_name: EasyPDFTool-Windows
+            release_name: EasyPDFTool-Windows.exe
           - os: macos-latest
-            artifact_name: DocsTool-MacOS
-            release_name: DocsTool-MacOS
+            artifact_name: EasyPDFTool-MacOS
+            release_name: EasyPDFTool-MacOS
 
     steps:
     - name: Checkout repository
@@ -57,18 +57,44 @@ jobs:
       shell: bash
       run: |
         cd dist
-        # Windows creates DocsTool.exe, Linux/Mac creates DocsTool
-        if [ -f "DocsTool.exe" ]; then
-          mv DocsTool.exe ${{ matrix.release_name }}
-        elif [ -f "DocsTool" ]; then
-          mv DocsTool ${{ matrix.release_name }}
+        # Windows creates EasyPDFTool.exe, Linux/Mac creates EasyPDFTool
+        if [ -f "EasyPDFTool.exe" ]; then
+          mv EasyPDFTool.exe ${{ matrix.release_name }}
+        elif [ -f "EasyPDFTool" ]; then
+          mv EasyPDFTool ${{ matrix.release_name }}
         fi
+
+    - name: Build MSIX Package (Windows only)
+      if: matrix.os == 'windows-latest'
+      shell: powershell
+      run: |
+        # Create staging directory for MSIX build
+        New-Item -ItemType Directory -Force -Path dist/msix_build
+        
+        # Copy built executable and rename it to match AppxManifest target
+        Copy-Item -Path dist/${{ matrix.release_name }} -Destination dist/msix_build/EasyPDFTool.exe
+        
+        # Copy store manifest and assets
+        Copy-Item -Path AppxManifest.xml -Destination dist/msix_build/
+        Copy-Item -Path msix_assets -Destination dist/msix_build/ -Recurse
+        
+        # Find makeappx.exe path dynamically from Windows Kits
+        $makeappx = (Get-ChildItem -Path "C:\Program Files (x86)\Windows Kits\10\bin" -Filter "makeappx.exe" -Recurse | Where-Object { $_.FullName -like "*x64*" } | Select-Object -First 1).FullName
+        if (-not $makeappx) {
+            $makeappx = (Get-ChildItem -Path "C:\Program Files (x86)\Windows Kits\10\bin" -Filter "makeappx.exe" -Recurse | Select-Object -First 1).FullName
+        }
+        
+        Write-Host "Using makeappx at: $makeappx"
+        & $makeappx pack /d dist/msix_build /p dist/EasyPDFTool.msix
+        Write-Host "MSIX compilation completed successfully."
 
     - name: Upload workflow artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.artifact_name }}
-        path: dist/${{ matrix.release_name }}
+        path: |
+          dist/${{ matrix.release_name }}
+          dist/*.msix
 
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v2
@@ -79,6 +105,9 @@ jobs:
         name: Release ${{ github.event.inputs.tag_name || github.ref_name }}
         draft: false
         prerelease: false
-        files: dist/${{ matrix.release_name }}
+        files: |
+          dist/${{ matrix.release_name }}
+          dist/*.msix
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

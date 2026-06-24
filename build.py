@@ -19,7 +19,7 @@ def build():
         "--onefile",                   # Build into a single executable file
         "--noconsole",                 # Hide console window
         f"--add-data=icon.png{sep}.",  # Bundle window icon
-        "--name=DocsTool",             # Output executable name
+        "--name=EasyPDFTool",          # Output executable name
     ]
 
     # Attach desktop icon if present

@@ -5,14 +5,14 @@
          IgnorableNamespaces="uap rescap">
   
   <!-- Identity values MUST match the ones assigned in the Microsoft Store Partner Center -->
-  <Identity Name="Hyeonseok.DocsTool"
-            Publisher="CN=PlaceholderPublisher"
+  <Identity Name="dev.wombat.EasyPDFTool"
+            Publisher="CN=A45D67D6-702F-427F-A0BF-48E664792AFA"
             Version="1.0.0.0"
             ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>Docs Tool</DisplayName>
-    <PublisherDisplayName>Hyeonseok</PublisherDisplayName>
+    <DisplayName>Easy PDF Tool</DisplayName>
+    <PublisherDisplayName>dev.wombat</PublisherDisplayName>
     <Logo>msix_assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -33,15 +33,15 @@
   </Capabilities>
 
   <Applications>
-    <Application Id="DocsToolApp"
-                 Executable="DocsTool.exe"
+    <Application Id="EasyPDFToolApp"
+                 Executable="EasyPDFTool.exe"
                  EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="Docs Tool"
+      <uap:VisualElements DisplayName="Easy PDF Tool"
                           Description="PDF Utility Suite for Conversion, Merging, and Security"
                           BackgroundColor="#0f111a"
                           Square150x150Logo="msix_assets\Square150x150Logo.png"
                           Square44x44Logo="msix_assets\Square44x44Logo.png">
-        <uap:DefaultTile ShortName="Docs Tool" Wide310x150Logo="msix_assets\Wide310x150Logo.png">
+        <uap:DefaultTile ShortName="Easy PDF Tool" Wide310x150Logo="msix_assets\Wide310x150Logo.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />
             <uap:ShowOn Tile="wide310x150Logo" />
