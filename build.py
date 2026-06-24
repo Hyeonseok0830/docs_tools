@@ -14,12 +14,20 @@ def build():
     print("--- Docs Tool Standalone Packaging Start ---")
     
     # PyInstaller arguments (excluding 'pyinstaller' program name)
+    sep = ";" if sys.platform.startswith("win") else ":"
     cmd_args = [
-        "--onefile",         # Build into a single executable file
-        "--noconsole",       # Hide console window
-        "--name=DocsTool",   # Output executable name
-        "app.py"
+        "--onefile",                   # Build into a single executable file
+        "--noconsole",                 # Hide console window
+        f"--add-data=icon.png{sep}.",  # Bundle window icon
+        "--name=DocsTool",             # Output executable name
     ]
+
+    # Attach desktop icon if present
+    if os.path.exists("icon.ico"):
+        cmd_args.append("--icon=icon.ico")
+
+    cmd_args.append("app.py")
+
     
     # Run PyInstaller via Python API directly
     try:

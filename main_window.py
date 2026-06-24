@@ -1,8 +1,11 @@
+import os
+import sys
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFrame,
     QPushButton, QLabel, QStackedWidget, QButtonGroup
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from styles import QSS_STYLESHEET
 
 from views.organize_view import OrganizeView
@@ -11,13 +14,24 @@ from views.convert_view import ConvertView
 from views.edit_view import EditView
 from views.security_view import SecurityView
 
+def get_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Docs Tool - PDF Suite")
         self.resize(1100, 750)
+        self.setWindowIcon(QIcon(get_resource_path("icon.png")))
         self.setup_ui()
         self.setStyleSheet(QSS_STYLESHEET)
+
 
     def setup_ui(self):
         # Central widget
