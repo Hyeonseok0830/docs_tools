@@ -1,0 +1,27 @@
+# Python Cache & Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+venv/
+env/
+.venv/
+ENV/
+
+# PyInstaller / Build Artifacts
+build/
+dist/
+*.spec
+
+# Configuration & Temporary Files
+config.json
+temp_*.pdf
+temp_watermark.pdf
+temp_overlay.pdf
+
+# OS Specific Files
+.DS_Store
+Thumbs.db
+desktop.ini
